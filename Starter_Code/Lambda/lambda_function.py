@@ -124,8 +124,69 @@ def recommend_portfolio(intent_request):
     risk_level = get_slots(intent_request)["riskLevel"]
     source = intent_request["invocationSource"]
 
-    # YOUR CODE GOES HERE!
-
+    # Validate that the user is over 65 years or younger
+    if age is not None:
+        birth_date = datetime.strptime(birthday, "%Y-%m-%d")
+        age = relativedelta(datetime.now(), birth_date).years
+        if age > 65:
+            return build_validation_result(
+                False,
+                "age",
+                "You should be at least 0-65 years old to use this service, "
+                "please provide a different date of birth.",
+            )
+        # Validate the investment amount, it should be >= 5000
+    if investment_amount is not None:
+        investment_amount = parse_float(
+            investment_amount
+        )  # Since parameters are strings it's important to cast values
+        if investment_amount <= 5000:
+            return build_validation_result(
+                False,
+                "investment_amount",
+                "The amount to convert should be greater than or equal to 5000, "
+                "please provide a correct amount in dollars to convert.",
+            )
+    # Investment recomendations
+    if risk_level == "none":
+        close = close(
+            intent_request["sessionAttributes"],
+            "Fulfilled",
+            {
+                "contentType": "PlainText",
+            "content": """100% bonds, 0% equities.""",
+        },
+    )
+    elif risk_level == "low":
+        close = close(
+            intent_request["sessionAttributes"],
+            "Fulfilled",
+            {
+                "contentType": "PlainText",
+            "content": """60% bonds, 40% equities.""",
+        },
+    )
+    
+    elif risk_level == "medium":
+        close = close(
+            intent_request["sessionAttributes"],
+            "Fulfilled",
+            {
+                "contentType": "PlainText",
+            "content": """40% bonds, 60% equities.""",
+        },
+    )
+    
+    elif risk_level == "high":
+        close = close(
+            intent_request["sessionAttributes"],
+            "Fulfilled",
+            {
+                "contentType": "PlainText",
+            "content": """20% bonds, 80% equities.""",
+        },
+    )
+    return close
 
 ### Intents Dispatcher ###
 def dispatch(intent_request):

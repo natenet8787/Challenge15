@@ -1,1 +1,2 @@
 # Challenge15
+I was able to configure and initialize the robo advisor without problems. I was also able to successfully build and deploy the robo advisor. I ran into some trouble when deploying the lambda function. The code was tested successfully in lambda and I have included screen shots. The problem seems to happen when building the bot and initializing the lambda functions. I am receiving an error “An error has occurred: The server encountered an error processing the Lambda response”. I’m not sure if the problem is with my code or is in the starter code provided. 
